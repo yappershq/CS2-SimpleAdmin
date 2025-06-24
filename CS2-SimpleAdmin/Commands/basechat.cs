@@ -62,6 +62,7 @@ public partial class CS2_SimpleAdmin
         {
             player.SendLocalizedMessage(_localizer,
                 "sa_adminsay_prefix",
+                player.PlayerName,
                 utf8String.ReplaceColorTags());
         }
     }
