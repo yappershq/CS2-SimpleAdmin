@@ -57,21 +57,11 @@ public class Migration(Database database)
         }
         catch (Exception ex)
         {
-            CS2_SimpleAdmin._logger?.LogError($"Error executing migrations");
-            CS2_SimpleAdmin._logger?.LogError($"Error executing migrations");
-            CS2_SimpleAdmin._logger?.LogError($"Error executing migrations");
-            CS2_SimpleAdmin._logger?.LogError($"Error executing migrations");
-            CS2_SimpleAdmin._logger?.LogError($"Error executing migrations");
-            CS2_SimpleAdmin._logger?.LogError($"Error executing migrations");
-            CS2_SimpleAdmin._logger?.LogError($"Error executing migrations");
-            CS2_SimpleAdmin._logger?.LogError($"Error executing migrations");
-            CS2_SimpleAdmin._logger?.LogError($"Error executing migrations");
-            CS2_SimpleAdmin._logger?.LogError($"Error executing migrations");
-            CS2_SimpleAdmin._logger?.LogError($"Error executing migrations");
-            CS2_SimpleAdmin._logger?.LogError($"Error executing migrations");
-            CS2_SimpleAdmin._logger?.LogError($"Error executing migrations");
-            CS2_SimpleAdmin._logger?.LogError($"Error executing migrations");
-            CS2_SimpleAdmin._logger?.LogError($"Error executing migrations: {ex.Message}");
+            CS2_SimpleAdmin._logger?.LogCritical(
+                "Error executing migrations: {message} {stackTrace}",
+                ex.Message,
+                ex.StackTrace
+            );
         }
     }
 

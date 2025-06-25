@@ -1,11 +1,11 @@
-﻿using CounterStrikeSharp.API.Core;
+﻿using System.Text;
+using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Translations;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
+using CounterStrikeSharp.API.Modules.Entities;
 using CounterStrikeSharp.API.Modules.Memory;
 using CounterStrikeSharp.API.Modules.Utils;
-using System.Text;
-using CounterStrikeSharp.API.Modules.Entities;
 
 namespace CS2_SimpleAdmin;
 
@@ -17,16 +17,26 @@ public partial class CS2_SimpleAdmin
     {
         Helper.LogCommand(caller, command);
 
-        var utf8BytesString = Encoding.UTF8.GetBytes(command.GetCommandString[command.GetCommandString.IndexOf(' ')..]);
+        var utf8BytesString = Encoding.UTF8.GetBytes(
+            command.GetCommandString[command.GetCommandString.IndexOf(' ')..]
+        );
         var utf8String = Encoding.UTF8.GetString(utf8BytesString);
 
-        foreach (var player in Helper.GetValidPlayers()
-                     .Where(p => AdminManager.PlayerHasPermissions(new SteamID(p.SteamID), "@css/chat")))
+        foreach (
+            var player in Helper
+                .GetValidPlayers()
+                .Where(p => AdminManager.PlayerHasPermissions(new SteamID(p.SteamID), "@css/chat"))
+        )
         {
             if (_localizer != null)
-                player.PrintToChat(_localizer["sa_adminchat_template_admin",
-                    caller == null ? _localizer?["sa_console"] ?? "Console" : caller.PlayerName,
-                    utf8String]);
+                player.PrintToChat(
+                    _localizer[
+                        "sa_adminchat_template_admin_with_rank",
+                        "[RANK]",
+                        caller == null ? _localizer?["sa_console"] ?? "Console" : caller.PlayerName,
+                        utf8String
+                    ]
+                );
         }
     }
 
@@ -34,9 +44,12 @@ public partial class CS2_SimpleAdmin
     [RequiresPermissions("@css/chat")]
     public void OnAdminCustomSayCommand(CCSPlayerController? caller, CommandInfo command)
     {
-        if (command.GetCommandString[command.GetCommandString.IndexOf(' ')..].Length == 0) return;
+        if (command.GetCommandString[command.GetCommandString.IndexOf(' ')..].Length == 0)
+            return;
 
-        var utf8BytesString = Encoding.UTF8.GetBytes(command.GetCommandString[command.GetCommandString.IndexOf(' ')..]);
+        var utf8BytesString = Encoding.UTF8.GetBytes(
+            command.GetCommandString[command.GetCommandString.IndexOf(' ')..]
+        );
         var utf8String = Encoding.UTF8.GetString(utf8BytesString);
 
         Helper.LogCommand(caller, command);
@@ -51,19 +64,59 @@ public partial class CS2_SimpleAdmin
     [RequiresPermissions("@css/chat")]
     public void OnAdminSayCommand(CCSPlayerController? caller, CommandInfo command)
     {
-        if (command.GetCommandString[command.GetCommandString.IndexOf(' ')..].Length == 0) return;
+        if (command.GetCommandString[command.GetCommandString.IndexOf(' ')..].Length == 0)
+            return;
 
-        var utf8BytesString = Encoding.UTF8.GetBytes(command.GetCommandString[command.GetCommandString.IndexOf(' ')..]);
+        var utf8BytesString = Encoding.UTF8.GetBytes(
+            command.GetCommandString[command.GetCommandString.IndexOf(' ')..]
+        );
         var utf8String = Encoding.UTF8.GetString(utf8BytesString);
 
         Helper.LogCommand(caller, command);
 
+        Dictionary<string, string> ranks = new()
+        {
+            { "@yappershq/tmod", "[TM]" },
+            { "@yappershq/tmodplus", "[TM]" },
+            { "@yappershq/mod", "[M]" },
+            { "@yappershq/modplus", "[M]" },
+            { "@yappershq/smod", "[SM]" },
+            { "@yappershq/smodplus", "[SM]" },
+            { "@yappershq/admin", "[A]" },
+            { "@yappershq/adminplus", "[A]" },
+            { "@yappershq/sadmin", "[SA]" },
+            { "@yappershq/sadminplus", "[SA]" },
+            { "@yappershq/developer", "[Dev]" },
+            { "@yappershq/developerplus", "[Dev]" },
+            { "@yappershq/core", "[Core]" },
+            { "@yappershq/coreplus", "[Core]" },
+        };
+
+        string? playerRank = null;
+        foreach (string key in ranks.Keys.Reverse())
+        {
+            if (AdminManager.PlayerHasPermissions(caller, key))
+            {
+                playerRank = ranks[key];
+                break;
+            }
+        }
+
+        if (_localizer == null)
+            return;
+
+        var message = _localizer[
+            "sa_adminsay_prefix_with_rank",
+            playerRank ?? "",
+            caller?.PlayerName ?? "Console",
+            utf8String
+        ]
+            .ToString()
+            .ReplaceColorTags();
+
         foreach (var player in Helper.GetValidPlayers())
         {
-            player.SendLocalizedMessage(_localizer,
-                "sa_adminsay_prefix",
-                player.PlayerName,
-                utf8String.ReplaceColorTags());
+            player.PrintToChat(message);
         }
     }
 
@@ -71,11 +124,15 @@ public partial class CS2_SimpleAdmin
     [RequiresPermissions("@css/chat")]
     public void OnAdminPrivateSayCommand(CCSPlayerController? caller, CommandInfo command)
     {
-        var callerName = caller == null ? _localizer?["sa_console"] ?? "Console" : caller.PlayerName;
+        var callerName =
+            caller == null ? _localizer?["sa_console"] ?? "Console" : caller.PlayerName;
 
         var targets = GetTarget(command);
-        if (targets == null) return;
-        var playersToTarget = targets.Players.Where(player => player is { IsValid: true, IsHLTV: false }).ToList();
+        if (targets == null)
+            return;
+        var playersToTarget = targets
+            .Players.Where(player => player is { IsValid: true, IsHLTV: false })
+            .ToList();
 
         //Helper.LogCommand(caller, command);
 
@@ -97,7 +154,9 @@ public partial class CS2_SimpleAdmin
     [RequiresPermissions("@css/chat")]
     public void OnAdminCenterSayCommand(CCSPlayerController? caller, CommandInfo command)
     {
-        var utf8BytesString = Encoding.UTF8.GetBytes(command.GetCommandString[command.GetCommandString.IndexOf(' ')..]);
+        var utf8BytesString = Encoding.UTF8.GetBytes(
+            command.GetCommandString[command.GetCommandString.IndexOf(' ')..]
+        );
         var utf8String = Encoding.UTF8.GetString(utf8BytesString);
 
         Helper.LogCommand(caller, command);
@@ -108,7 +167,9 @@ public partial class CS2_SimpleAdmin
     [RequiresPermissions("@css/chat")]
     public void OnAdminHudSayCommand(CCSPlayerController? caller, CommandInfo command)
     {
-        var utf8BytesString = Encoding.UTF8.GetBytes(command.GetCommandString[command.GetCommandString.IndexOf(' ')..]);
+        var utf8BytesString = Encoding.UTF8.GetBytes(
+            command.GetCommandString[command.GetCommandString.IndexOf(' ')..]
+        );
         var utf8String = Encoding.UTF8.GetString(utf8BytesString);
 
         Helper.LogCommand(caller, command);
@@ -116,6 +177,10 @@ public partial class CS2_SimpleAdmin
         VirtualFunctions.ClientPrintAll(
             HudDestination.Alert,
             utf8String.ReplaceColorTags(),
-            0, 0, 0, 0);
+            0,
+            0,
+            0,
+            0
+        );
     }
 }

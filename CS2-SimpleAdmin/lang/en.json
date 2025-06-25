@@ -1,6 +1,6 @@
 {
 	"sa_title": "SimpleAdmin",
-	"sa_prefix": "{lightred}[SA] {default}",
+	"sa_prefix": "",
 	
 	"sa_unknown": "Unknown",
 	"sa_no_permission": "You do not have permissions to use this command.",
@@ -126,9 +126,10 @@
 	"sa_admin_vote_message": "{lightred}{0}{default} started voting for {lightred}{1}{default}",
 	"sa_admin_vote_message_results": "{lime}VOTING RESULTS FOR {gold}{0}",
 	"sa_admin_vote_message_results_answer": "{lime}{0} {default}- {gold}{1}",
-	"sa_adminsay_prefix": "{Magenta}[STAFF] {0}: {default}{1}",
-	"sa_adminchat_template_admin": "{lime}[STAFF CHAT] {0}: {Magenta}{1}{default}",
-	"sa_adminchat_template_player": "{lime}(PLAYER -> STAFF) {0}{default}: {Magenta}{1}{default}",
+	"sa_adminsay_prefix_with_rank": " {Red}{0} {Purple}{1}: {Red}{2}{default}",
+	"sa_adminchat_template_admin_with_rank": "{Purple}[STAFF CHAT] {Red}{0} {lime}{1}: {2}{default}",
+	"sa_adminchat_template_player_t": "{lime}[PLAYER->STAFF] {Gold}{0}: {lime}{1}{default}",
+	"sa_adminchat_template_player_ct": "{lime}[PLAYER->STAFF] {LightBlue}{0}: {lime}{1}{default}",
 	"sa_discord_log_command": "**{0}** issued command `{1}` on server `HOSTNAME`",
 	"sa_menu_pluginsmanager_loaded": "{lime}Enabled {default}plugin {lime}{0}",
 	"sa_menu_pluginsmanager_unloaded": "{lightred}Disabled {default}plugin {lightred}{0}"
