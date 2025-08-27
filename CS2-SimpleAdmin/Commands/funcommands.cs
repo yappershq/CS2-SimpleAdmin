@@ -154,7 +154,7 @@ public partial class CS2_SimpleAdmin
             sceneNode.GetSkeletonInstance().Scale = size;
             player.PlayerPawn.Value.AcceptInput("SetScale", null, null, size.ToString(CultureInfo.InvariantCulture));
 
-            Server.NextFrame(() =>
+            Server.NextWorldUpdate(() =>
             {
                 Utilities.SetStateChanged(player.PlayerPawn.Value, "CBaseEntity", "m_CBodyComponent");
             });

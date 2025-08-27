@@ -62,7 +62,7 @@ public class PlayerManager
             if (isBanned)
             {
                 // Kick the player if banned
-                await Server.NextFrameAsync(() =>
+                await Server.NextWorldUpdateAsync(() =>
                 {
                     if (!player.UserId.HasValue) return;
                     Helper.KickPlayer(userId, NetworkDisconnectionReason.NETWORK_DISCONNECT_REJECT_BANNED);
@@ -183,7 +183,7 @@ public class PlayerManager
                                     break;
                                 case "MUTE":
                                     PlayerPenaltyManager.AddPenalty(CS2_SimpleAdmin.PlayersInfo[userId].Slot, PenaltyType.Mute, ends, duration);
-                                    await Server.NextFrameAsync(() =>
+                                    await Server.NextWorldUpdateAsync(() =>
                                     {
                                         player.VoiceFlags = VoiceFlags.Muted;
                                     });
@@ -192,7 +192,7 @@ public class PlayerManager
                                     break;
                                 default:
                                     PlayerPenaltyManager.AddPenalty(CS2_SimpleAdmin.PlayersInfo[userId].Slot, PenaltyType.Silence, ends, duration);
-                                    await Server.NextFrameAsync(() =>
+                                    await Server.NextWorldUpdateAsync(() =>
                                     {
                                         player.VoiceFlags = VoiceFlags.Muted;
                                     });
@@ -208,7 +208,7 @@ public class PlayerManager
                 {
                     var associatedAcccountsChunks = CS2_SimpleAdmin.PlayersInfo[userId].AccountsAssociated.ChunkBy(5).ToList();
                     
-                    await Server.NextFrameAsync(() =>
+                    await Server.NextWorldUpdateAsync(() =>
                     {
                         foreach (var admin in Helper.GetValidPlayers()
                                      .Where(p => (AdminManager.PlayerHasPermissions(new SteamID(p.SteamID), "@css/kick") ||
@@ -322,7 +322,7 @@ public class PlayerManager
                 foreach (var player in bannedPlayers)
                 {
                     if (player.UserId.HasValue)
-                        await Server.NextFrameAsync(() => Helper.KickPlayer((int)player.UserId, NetworkDisconnectionReason.NETWORK_DISCONNECT_REJECT_BANNED));
+                        await Server.NextWorldUpdateAsync(() => Helper.KickPlayer((int)player.UserId, NetworkDisconnectionReason.NETWORK_DISCONNECT_REJECT_BANNED));
                 }
                 
                 var onlinePlayers = tempPlayers.AsValueEnumerable().Select(player => (player.SteamID, player.UserId, player.Slot)).ToList();

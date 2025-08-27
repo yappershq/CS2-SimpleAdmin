@@ -388,7 +388,7 @@ public partial class CS2_SimpleAdmin
 
                 if (!string.IsNullOrEmpty(punishCommand))
                 {
-                    await Server.NextFrameAsync(() =>
+                    await Server.NextWorldUpdateAsync(() =>
                     {
                         Server.ExecuteCommand(punishCommand.Replace("USERID", playerInfo.UserId.ToString()).Replace("STEAMID64", playerInfo.SteamId?.ToString()));
                     });
@@ -468,7 +468,7 @@ public partial class CS2_SimpleAdmin
 
                     if (!string.IsNullOrEmpty(punishCommand))
                     {
-                        await Server.NextFrameAsync(() =>
+                        await Server.NextWorldUpdateAsync(() =>
                         {
                             Server.ExecuteCommand(punishCommand.Replace("STEAMID64", steamid.SteamId64.ToString()));
                         });

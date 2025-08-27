@@ -406,7 +406,7 @@ internal class BanManager(Database.Database? database)
             {
                 if (!player.UserId.HasValue || CS2_SimpleAdmin.PlayersInfo[player.UserId.Value].WaitingForKick) continue;
 
-                await Server.NextFrameAsync(() =>
+                await Server.NextWorldUpdateAsync(() =>
                 {
                     Helper.KickPlayer(player.UserId.Value, NetworkDisconnectionReason.NETWORK_DISCONNECT_KICKBANADDED);
                 });

@@ -119,7 +119,7 @@ public partial class CS2_SimpleAdmin
                         mutesList[PenaltyType.Silence].Add(_localizer["sa_player_penalty_info_no_active_silence"]);
                 }
 
-                await Server.NextFrameAsync(() =>
+                await Server.NextWorldUpdateAsync(() =>
                 {
                     caller.SendLocalizedMessage(_localizer, "sa_player_penalty_info",
                     [
@@ -447,10 +447,10 @@ public partial class CS2_SimpleAdmin
             if (caller.PlayerPawn?.Value?.LifeState == (int)LifeState_t.LIFE_ALIVE)
                 caller.PlayerPawn.Value?.CommitSuicide(true, false);
 
-            AddTimer(1.0f, () => { Server.NextFrame(() => caller.ChangeTeam(CsTeam.Spectator)); }, CounterStrikeSharp.API.Modules.Timers.TimerFlags.STOP_ON_MAPCHANGE);
-            AddTimer(1.4f, () => { Server.NextFrame(() => caller.ChangeTeam(CsTeam.None)); }, CounterStrikeSharp.API.Modules.Timers.TimerFlags.STOP_ON_MAPCHANGE);
+            AddTimer(1.0f, () => { Server.NextWorldUpdate(() => caller.ChangeTeam(CsTeam.Spectator)); }, CounterStrikeSharp.API.Modules.Timers.TimerFlags.STOP_ON_MAPCHANGE);
+            AddTimer(1.4f, () => { Server.NextWorldUpdate(() => caller.ChangeTeam(CsTeam.None)); }, CounterStrikeSharp.API.Modules.Timers.TimerFlags.STOP_ON_MAPCHANGE);
             caller.PrintToChat($"You are hidden now!");
-            AddTimer(2.0f, () => { Server.NextFrame(() => Server.ExecuteCommand("sv_disable_teamselect_menu 0")); }, CounterStrikeSharp.API.Modules.Timers.TimerFlags.STOP_ON_MAPCHANGE);
+            AddTimer(2.0f, () => { Server.NextWorldUpdate(() => Server.ExecuteCommand("sv_disable_teamselect_menu 0")); }, CounterStrikeSharp.API.Modules.Timers.TimerFlags.STOP_ON_MAPCHANGE);
         }
     }
 
@@ -495,7 +495,7 @@ public partial class CS2_SimpleAdmin
 
             Task.Run(async () =>
             {
-                await Server.NextFrameAsync(() =>
+                await Server.NextWorldUpdateAsync(() =>
                 {
                     Action<string> printMethod = caller == null ? Server.PrintToConsole : caller.PrintToConsole;
 
@@ -694,7 +694,7 @@ public partial class CS2_SimpleAdmin
                         });
                 });
 
-                await Server.NextFrameAsync(() =>
+                await Server.NextWorldUpdateAsync(() =>
                 {
                     warnsMenu?.Open(caller);
                 });

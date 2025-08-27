@@ -165,7 +165,7 @@ public partial class CS2_SimpleAdmin
         )
             return;
 
-        Server.NextFrame(
+        Server.NextWorldUpdate(
             (
                 () =>
                 {
@@ -181,7 +181,7 @@ public partial class CS2_SimpleAdmin
             )
         );
 
-        // Server.NextFrame(() =>
+        // Server.NextWorldUpdate(() =>
         // {
         //     var player = Utilities.GetPlayerFromSlot(playerslot);
         //

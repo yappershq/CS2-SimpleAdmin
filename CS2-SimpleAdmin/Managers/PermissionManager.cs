@@ -368,7 +368,7 @@ public class PermissionManager(Database.Database? database)
 							return acc;
 						});
 					
-					Server.NextFrameAsync(() =>
+					Server.NextWorldUpdateAsync(() =>
 					{
 						var keysToRemove = new List<SteamID>();
 
@@ -406,7 +406,7 @@ public class PermissionManager(Database.Database? database)
 						}
 					});
 
-					// Server.NextFrameAsync(() =>
+					// Server.NextWorldUpdateAsync(() =>
 					// {
 					// 	for (var index = 0; index < AdminCache.Keys.ToList().Count; index++)
 					// 	{
